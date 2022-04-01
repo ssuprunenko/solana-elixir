@@ -50,7 +50,7 @@ end
 
 defimpl Jason.Encoder, for: Solana.Instruction do
   def encode(ix = %Solana.Instruction{}, _opts) do
-    Jason.encode(%{
+    Jason.encode!(%{
       data: Base58.encode(ix.data),
       program: Base58.encode(ix.program),
       accounts: ix.accounts

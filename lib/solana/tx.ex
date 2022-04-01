@@ -302,7 +302,7 @@ end
 
 defimpl Jason.Encoder, for: Solana.Transaction do
   def encode(tx = %Solana.Transaction{}, _opts) do
-    Jason.encode(%{
+    Jason.encode!(%{
       instructions: tx.instructions,
       signers: tx.signers,
       blockhash: Base58.encode(tx.blockhash),
