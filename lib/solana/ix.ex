@@ -22,6 +22,18 @@ defmodule Solana.Instruction do
     accounts: []
   ]
 
+  def from_json(%{
+        "data" => data,
+        "program" => program,
+        "accounts" => accounts
+      }) do
+    %Solana.Instruction{
+      data: data,
+      program: program,
+      accounts: accounts
+    }
+  end
+
   @doc false
   def encode_data(data) do
     Enum.into(data, <<>>, &encode_value/1)

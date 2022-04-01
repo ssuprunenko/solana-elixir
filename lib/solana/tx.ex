@@ -35,6 +35,20 @@ defmodule Solana.Transaction do
     signers: []
   ]
 
+  def from_json(%{
+        "instructions" => instructions,
+        "signers" => signers,
+        "blockhash" => blockhash,
+        "payer" => payer
+      }) do
+    %Solana.Transaction{
+      instructions: instructions,
+      signers: signers,
+      blockhash: Base58.decode(blockhash),
+      payer: Base58.decode(payer)
+    }
+  end
+
   @doc """
   decodes a base58-encoded signature and returns it in a tuple.
 

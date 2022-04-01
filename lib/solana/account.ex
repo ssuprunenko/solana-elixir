@@ -19,6 +19,18 @@ defmodule Solana.Account do
     signer?: false,
     writable?: false
   ]
+
+  def from_json(%{
+        "key" => key,
+        "signer?" => signer?,
+        "writable?" => writable?
+      }) do
+    %Solana.Account{
+      key: key,
+      signer?: signer?,
+      writable?: writable?
+    }
+  end
 end
 
 defimpl Jason.Encoder, for: Solana.Account do
