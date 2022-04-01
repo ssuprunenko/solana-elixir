@@ -108,9 +108,16 @@ defmodule Solana.RPC.Request do
   For more information, see [the Solana
   docs](https://docs.solana.com/developing/clients/jsonrpc-api#sendtransaction).
   """
+
   @spec send_transaction(transaction :: Solana.Transaction.t(), opts :: keyword) :: t
   def send_transaction(tx = %Solana.Transaction{}, opts \\ []) do
     {:ok, tx_bin} = Solana.Transaction.to_binary(tx)
+    opts = opts |> fix_tx_opts() |> encode_opts(%{"encoding" => "base64"})
+    {"sendTransaction", [Base.encode64(tx_bin), opts]}
+  end
+
+  @spec send_raw_transaction(transaction :: binary(), opts :: keyword) :: t
+  def send_raw_transaction(tx_bin, opts \\ []) do
     opts = opts |> fix_tx_opts() |> encode_opts(%{"encoding" => "base64"})
     {"sendTransaction", [Base.encode64(tx_bin), opts]}
   end
