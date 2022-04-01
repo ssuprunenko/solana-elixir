@@ -22,6 +22,10 @@ end
 
 defimpl Jason.Encoder, for: Solana.Account do
   def encode(account = %Solana.Account{}, _opts) do
-    Jason.encode(%{key: account.key, signer: account.signer, writable: account.writable})
+    Jason.encode(%{
+      key: Base58.encode(account.key),
+      signer?: account.signer?,
+      writable?: account.writable?
+    })
   end
 end

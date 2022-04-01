@@ -303,8 +303,8 @@ defimpl Jason.Encoder, for: Solana.Transaction do
     Jason.encode(%{
       instructions: tx.instructions,
       signers: tx.signers,
-      blockhash: tx.blockhash,
-      payer: tx.payer
+      blockhash: Base58.encode(tx.blockhash),
+      payer: Base58.encode(tx.payer)
     })
   end
 end
