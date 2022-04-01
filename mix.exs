@@ -60,7 +60,8 @@ defmodule Solana.MixProject do
       {:nimble_options, "~> 0.4.0"},
       # docs and testing
       {:ex_doc, "~> 0.25.5", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:b58, "~> 1.0.2"}
     ]
   end
 

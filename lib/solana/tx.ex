@@ -90,7 +90,9 @@ defmodule Solana.Transaction do
   def to_binary(tx = %__MODULE__{instructions: ixs, signers: signers}) do
     with {:ok, ixs} <- check_instructions(List.flatten(ixs)),
          accounts = compile_accounts(ixs, tx.payer),
-         true <- signers_match?(accounts, signers) do
+         true <-
+           IO.inspect(accounts, label: "accounts")
+           |> signers_match?(signers) do
       message = encode_message(accounts, tx.blockhash, ixs)
 
       signatures =
@@ -293,5 +295,16 @@ defmodule Solana.Transaction do
       Enum.map(nonsigners_write, &%Account{key: &1, writable?: true}),
       Enum.map(nonsigners_read, &%Account{key: &1})
     ])
+  end
+end
+
+defimpl Jason.Encoder, for: Solana.Transaction do
+  def encode(tx = %Solana.Transaction{}, _opts) do
+    Jason.encode(%{
+      instructions: tx.instructions,
+      signers: tx.signers,
+      blockhash: Base58.encode(tx.blockhash),
+      payer: Base58.encode(tx.payer)
+    })
   end
 end

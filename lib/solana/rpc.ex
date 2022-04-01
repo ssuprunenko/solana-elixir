@@ -110,6 +110,40 @@ defmodule Solana.RPC do
     end
   end
 
+  @spec send_signed_and_confirm(client, pid, [binary()] | binary(), keyword) ::
+          {:ok, [binary]} | {:error, :timeout, [binary]}
+  def send_signed_and_confirm(client, tracker, txs, opts \\ []) do
+    timeout = Keyword.get(opts, :timeout, 5_000)
+    request_opts = Keyword.take(opts, [:commitment])
+    requests = Enum.map(List.wrap(txs), &RPC.Request.send_raw_transaction(&1, request_opts))
+
+    client
+    |> RPC.send(requests)
+    |> Enum.flat_map(fn
+      {:ok, signature} ->
+        [signature]
+
+      {:error, %{"data" => %{"logs" => logs}, "message" => message}} ->
+        [message | logs]
+        |> Enum.join("\n")
+        |> Logger.error()
+
+        []
+
+      {:error, error} ->
+        Logger.error("error sending transaction: #{inspect(error)}")
+        []
+    end)
+    |> case do
+      [] ->
+        :error
+
+      signatures ->
+        :ok = RPC.Tracker.start_tracking(tracker, signatures, request_opts)
+        await_confirmations(signatures, timeout, [])
+    end
+  end
+
   defp await_confirmations([], _, confirmed), do: {:ok, confirmed}
 
   defp await_confirmations(signatures, timeout, done) do

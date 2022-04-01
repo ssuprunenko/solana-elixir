@@ -45,3 +45,13 @@ defmodule Solana.Instruction do
 
   defp unary(val), do: if(val, do: 1, else: 0)
 end
+
+defimpl Jason.Encoder, for: Solana.Transaction do
+  def encode(ix = %Solana.Instruction{}, _opts) do
+    Jason.encode(%{
+      data: Base58.encode(ix.data),
+      program: Base58.encode(ix.program),
+      accounts: ix.accounts
+    })
+  end
+end
