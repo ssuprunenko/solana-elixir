@@ -3,6 +3,7 @@ defmodule Solana.Account do
   Functions, types, and structures related to Solana
   [accounts](https://docs.solana.com/developing/programming-model/accounts).
   """
+  @derive Jason.Encoder
 
   @typedoc """
   All the information needed to encode an account in a transaction message.

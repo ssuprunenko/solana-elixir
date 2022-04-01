@@ -3,6 +3,8 @@ defmodule Solana.Transaction do
   Functions for building and encoding Solana
   [transactions](https://docs.solana.com/developing/programming-model/transactions)
   """
+  @derive Jason.Encoder
+
   require Logger
   alias Solana.{Account, CompactArray, Instruction}
 

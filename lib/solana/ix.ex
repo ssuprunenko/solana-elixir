@@ -3,6 +3,8 @@ defmodule Solana.Instruction do
   Functions, types, and structures related to Solana
   [instructions](https://docs.solana.com/developing/programming-model/transactions#instructions).
   """
+  @derive Jason.Encoder
+
   alias Solana.Account
 
   @typedoc """
