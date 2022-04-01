@@ -42,7 +42,7 @@ defmodule Solana.Transaction do
         "payer" => payer
       }) do
     %Solana.Transaction{
-      instructions: instructions |> Enum.map(&Instruction.from_json/1),
+      instructions: instructions |> Enum.map(fn x -> Enum.map(x, &Instruction.from_json/1) end),
       signers: signers,
       blockhash: Base58.decode(blockhash),
       payer: Base58.decode(payer)
