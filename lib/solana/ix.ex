@@ -30,7 +30,7 @@ defmodule Solana.Instruction do
     %Solana.Instruction{
       data: data,
       program: program,
-      accounts: accounts
+      accounts: accounts |> Enum.map(&Account.from_json/1)
     }
   end
 
