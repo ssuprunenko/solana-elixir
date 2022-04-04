@@ -26,7 +26,7 @@ defmodule Solana.Account do
         "writable?" => writable?
       }) do
     %Solana.Account{
-      key: key,
+      key: Base58.decode(key),
       signer?: signer?,
       writable?: writable?
     }
