@@ -157,7 +157,6 @@ defmodule Solana.Transaction do
 
   defp signers_match?(accounts, signers) do
     expected = MapSet.new(Enum.map(signers, &elem(&1, 1)))
-    IO.inspect(expected, label: "signers")
 
     accounts
     |> Enum.filter(& &1.signer?)
