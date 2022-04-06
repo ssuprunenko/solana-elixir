@@ -106,9 +106,7 @@ defmodule Solana.Transaction do
   def to_binary(tx = %__MODULE__{instructions: ixs, signers: signers}) do
     with {:ok, ixs} <- check_instructions(List.flatten(ixs)),
          accounts = compile_accounts(ixs, tx.payer),
-         true <-
-           IO.inspect(accounts, label: "accounts")
-           |> signers_match?(signers) do
+         true <- signers_match?(accounts, signers) do
       message = encode_message(accounts, tx.blockhash, ixs)
 
       signatures =
