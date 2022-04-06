@@ -28,8 +28,8 @@ defmodule Solana.Instruction do
         "accounts" => accounts
       }) do
     %Solana.Instruction{
-      data: data,
-      program: program,
+      data: Base58.decode(data),
+      program: Base58.decode(program),
       accounts: accounts |> Enum.map(&Account.from_json/1)
     }
   end
