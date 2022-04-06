@@ -117,7 +117,7 @@ defmodule Solana.RPC do
     request_opts = Keyword.take(opts, [:commitment])
     requests = Enum.map(List.wrap(txs), &RPC.Request.send_raw_transaction(&1, request_opts))
 
-    IO.inspect(requests)
+    IO.inspect(requests |> elem(1) |> List.first() |> Base.decode64())
 
     client
     |> RPC.send(requests)
