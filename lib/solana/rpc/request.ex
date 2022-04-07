@@ -92,6 +92,17 @@ defmodule Solana.RPC.Request do
   end
 
   @doc """
+  Returns the latest blockhash.
+
+  For more information, see [the Solana
+  docs](https://docs.solana.com/developing/clients/jsonrpc-api#getlatestblockhash).
+  """
+  @spec get_latest_blockhash(opts :: keyword) :: t
+  def get_latest_blockhash(opts \\ []) do
+    {"getLatestBlockhash", [encode_opts(opts)]}
+  end
+
+  @doc """
   Returns minimum balance required to make an account rent exempt.
 
   For more information, see [the Solana
