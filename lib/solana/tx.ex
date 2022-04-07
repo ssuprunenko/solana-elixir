@@ -150,6 +150,16 @@ defmodule Solana.Transaction do
     end
   end
 
+  def sign(%__MODULE__{signers: signers}, accounts, message) do
+    signatures =
+      signers
+      |> reorder_signers(accounts)
+      |> Enum.map(&sign(&1, message))
+      |> CompactArray.to_iolist()
+
+    {:ok, :erlang.list_to_binary([signatures, message])}
+  end
+
   defp check_instructions(ixs) do
     ixs
     |> Enum.with_index()
