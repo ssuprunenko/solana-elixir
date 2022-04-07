@@ -130,6 +130,26 @@ defmodule Solana.Transaction do
     end
   end
 
+  def prepare_to_sign(tx = %__MODULE__{instructions: ixs}) do
+    case ixs
+         |> List.flatten()
+         |> check_instructions() do
+      {:ok, ixs} ->
+        accounts = compile_accounts(ixs, tx.payer)
+        message = encode_message(accounts, tx.blockhash, ixs)
+
+        {:ok, accounts, message}
+
+      {:error, :no_program, idx} ->
+        Logger.error("Missing program id on instruction at index #{idx}")
+        {:error, :no_program}
+
+      {:error, message, idx} ->
+        Logger.error("error compiling instruction at index #{idx}: #{inspect(message)}")
+        {:error, message}
+    end
+  end
+
   defp check_instructions(ixs) do
     ixs
     |> Enum.with_index()
