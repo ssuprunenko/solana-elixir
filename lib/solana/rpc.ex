@@ -110,10 +110,8 @@ defmodule Solana.RPC do
     end
   end
 
-  @spec send_signed_and_confirm(client, pid, [binary()] | binary(), keyword) ::
-          {:ok, [binary]} | {:error, :timeout, [binary]}
-  def send_signed_and_confirm(client, tracker, txs, opts \\ []) do
-    timeout = Keyword.get(opts, :timeout, 5_000)
+  @spec send_signed(client, [binary()] | binary(), keyword) :: {:ok, [binary]} | :error
+  def send_signed(client, txs, opts \\ []) do
     request_opts = Keyword.take(opts, [:commitment])
     requests = Enum.map(List.wrap(txs), &RPC.Request.send_raw_transaction(&1, request_opts))
 
@@ -135,12 +133,8 @@ defmodule Solana.RPC do
         []
     end)
     |> case do
-      [] ->
-        :error
-
-      signatures ->
-        :ok = RPC.Tracker.start_tracking(tracker, signatures, request_opts)
-        await_confirmations(signatures, timeout, [])
+      [] -> :error
+      signatures -> {:ok, signatures}
     end
   end
 
