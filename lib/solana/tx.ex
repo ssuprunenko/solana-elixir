@@ -242,7 +242,10 @@ defmodule Solana.Transaction do
     Enum.into(Enum.with_index(accounts, &{&1.key, &2}), %{})
   end
 
-  defp sign({secret, pk}, message), do: Ed25519.signature(message, secret, pk)
+  defp sign({secret, _pk}, message) do
+    # Ed25519.signature(message, secret, pk)
+    :crypto.sign(:eddsa, :none, message, [secret, :ed25519])
+  end
 
   @doc """
   Parses a `t:Solana.Transaction.t/0` from data encoded in Solana's [binary
