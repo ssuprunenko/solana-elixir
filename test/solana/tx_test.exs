@@ -107,7 +107,7 @@ defmodule Solana.TransactionTest do
         signers: [payer, signer, read_only]
       }
 
-      {:ok, tx_bin} = Transaction.to_binary(tx)
+      {:ok, tx_bin, _} = Transaction.to_binary(tx)
       {_, extras} = Transaction.parse(tx_bin)
 
       assert [pubkey!(payer), pubkey!(signer), pubkey!(read_only)] ==
@@ -135,7 +135,7 @@ defmodule Solana.TransactionTest do
         signers: [payer]
       }
 
-      {:ok, tx_bin} = Transaction.to_binary(tx)
+      {:ok, tx_bin, _} = Transaction.to_binary(tx)
       {_, extras} = Transaction.parse(tx_bin)
 
       [actual_payer | _] = Keyword.get(extras, :accounts)
@@ -170,7 +170,7 @@ defmodule Solana.TransactionTest do
         signers: [payer, signer]
       }
 
-      {:ok, tx_bin} = Transaction.to_binary(tx)
+      {:ok, tx_bin, _} = Transaction.to_binary(tx)
       {_, extras} = Transaction.parse(tx_bin)
 
       # 2 signers, one read-only signer, 2 read-only non-signers (read_only and
@@ -199,7 +199,7 @@ defmodule Solana.TransactionTest do
         signers: [from]
       }
 
-      {:ok, tx_bin} = Transaction.to_binary(tx)
+      {:ok, tx_bin, _} = Transaction.to_binary(tx)
       {_, extras} = Transaction.parse(tx_bin)
 
       assert [_] = Keyword.get(extras, :signatures)
@@ -235,7 +235,7 @@ defmodule Solana.TransactionTest do
         signers: [payer, signer, read_only]
       }
 
-      {:ok, <<_::8, clipped_tx::binary>>} = Transaction.to_binary(tx)
+      {:ok, <<_::8, clipped_tx::binary>>, _} = Transaction.to_binary(tx)
       assert :error = Transaction.parse(clipped_tx)
     end
 
@@ -261,7 +261,7 @@ defmodule Solana.TransactionTest do
         signers: [from]
       }
 
-      {:ok, tx_bin} = Transaction.to_binary(tx)
+      {:ok, tx_bin, _} = Transaction.to_binary(tx)
       {actual, extras} = Transaction.parse(tx_bin)
 
       assert [_signature] = Keyword.get(extras, :signatures)

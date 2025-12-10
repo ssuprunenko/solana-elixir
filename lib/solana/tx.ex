@@ -113,9 +113,8 @@ defmodule Solana.Transaction do
         signers
         |> reorder_signers(accounts)
         |> Enum.map(&sign(&1, message))
-        |> CompactArray.to_iolist()
 
-      {:ok, :erlang.list_to_binary([signatures, message])}
+      {:ok, :erlang.list_to_binary([CompactArray.to_iolist(signatures), message]), signatures}
     else
       {:error, :no_program, idx} ->
         Logger.error("Missing program id on instruction at index #{idx}")
